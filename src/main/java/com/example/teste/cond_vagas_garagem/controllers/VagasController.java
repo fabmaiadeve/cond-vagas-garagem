@@ -4,6 +4,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.example.teste.springswaggercodegen3.api.VagasApi;
 import com.example.teste.springswaggercodegen3.model.Vaga;
+import com.example.teste.springswaggercodegen3.model.VagaDto;
 
 import jakarta.validation.Valid;
 
@@ -16,19 +17,19 @@ public class VagasController implements VagasApi {
 	}
 	
 	@Override
-	public ResponseEntity<Void> _addVaga(@Valid Vaga vaga) {
+	public ResponseEntity<Void> _addVaga(@Valid VagaDto vaga) {
 		// TODO Auto-generated method stub
 		return VagasApi.super._addVaga(vaga);
 	}
 	
 	@Override
-	public ResponseEntity<Vaga> _getVagaById(Long vagasId) {
+	public ResponseEntity<VagaDto> _getVagaById(Long vagasId) {
 		// TODO Auto-generated method stub
 		return VagasApi.super._getVagaById(vagasId);
 	}
 	
 	@Override
-	public ResponseEntity<Void> _updateVagaById(Long vagasId, @Valid Vaga vaga) {
+	public ResponseEntity<Void> _updateVagaById(Long vagasId, @Valid VagaDto vaga) {
 		// TODO Auto-generated method stub
 		return VagasApi.super._updateVagaById(vagasId, vaga);
 	}
