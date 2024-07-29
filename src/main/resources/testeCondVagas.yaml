@@ -1,0 +1,165 @@
+openapi: 3.0.0
+info:
+  version: 0.0.1
+  title: Swagger Cond Vagas Garagem - OpenAPI
+  description: Aplicação que determina as vagas de garagem para um condominio.
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: fmaiati@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://condvagas.swagger.io/api/v3
+tags:
+  - name: vagas
+    description: Vagas de Garagem
+paths:
+  /vagas/{vagasId}:
+    get:
+      tags:
+        - "vagas"
+      summary: "Encontra vaga by ID"
+      description: "Retorna uma vaga simples"
+      operationId: "getVagaById"
+      parameters:
+        - name: "vagasId"
+          in: "path"
+          description: "ID de uma vaga para retornar"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Vaga'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Vaga'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Vaga not found
+    put:
+      tags:
+      - "vagas"
+      summary: "Alterar vaga por Id"
+      description: "Alterar vaga por Id"
+      operationId: "updateVagaById"
+      parameters:
+      - name: "vagasId"
+        in: "path"
+        description: "ID de uma vaga para retornar"
+        required: true
+        schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        description: "Objecto Vaga que precisa ser alterado"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Vaga"
+      responses:
+        '204':
+          description: "successful operation"
+        '400':
+          description: "Vaga inválida"
+        '404':
+          description: "Vaga não encontrada"
+    delete:
+      tags:
+      - "vagas"
+      summary: "Deletar vaga por Id"
+      description: "Deletar vaga por Id"
+      operationId: "deleteVagaById"
+      parameters:
+      - name: "vagasId"
+        in: "path"
+        description: "The name that needs to be deleted"
+        required: true
+        schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        '204':
+          description: "successful operation"
+        '400':
+          description: "Invalid vaga id"
+        '404':
+          description: "Vaga não encontrada"  
+      security:
+        - api_key: []
+        - vaga_auth:
+            - "write:vagas"
+            - "read:vagas"
+  /vagas:
+    post:
+      tags:
+      - "vagas"
+      summary: "Adiciona uma nova vaga"
+      description: "Adiciona uma nova vaga"
+      operationId: "addVaga"
+      requestBody:
+        description: "Objecto Vaga que precisa ser adicionado"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Vaga"
+      responses:
+        '201':
+          description: "successful operation"
+        '405':
+          description: "Invalido input"
+      security:
+      - vaga_auth:
+        - "write:vagas"
+        - "read:vagas"
+components:
+  schemas:
+    Vaga:
+      required:
+        - numeroDaVaga
+        - ehAlugada
+        - moradorId
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        numeroDaVaga:
+          type: string
+          example: c220
+        ehAlugada:
+          type: boolean
+          description: campo lógico que determina se a vaga é alugada ou não
+        moradorQueAlugou:
+          type: integer
+          format: int64  
+        moradorId:
+          type: integer
+          format: int64
+        veiculoId:
+          type: integer
+          format: int64 
+
+  securitySchemes:
+    vaga_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://condvagas.swagger.io/oauth/authorize
+          scopes:
+            write:vagas: modify vagas in your account
+            read:vagas: read your vagas
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
