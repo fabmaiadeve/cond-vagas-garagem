@@ -14,8 +14,10 @@ servers:
 tags:
   - name: vagas
     description: Vagas de Garagem
+  - name: moradores
+    description: Moradores  
 paths:
-  /vagas/{vagasId}:
+  /vagas/{vagaId}:
     get:
       tags:
         - "vagas"
@@ -23,7 +25,7 @@ paths:
       description: "Retorna uma vaga simples"
       operationId: "getVagaById"
       parameters:
-        - name: "vagasId"
+        - name: "vagaId"
           in: "path"
           description: "ID de uma vaga para retornar"
           required: true
@@ -44,6 +46,11 @@ paths:
           description: Invalid ID supplied
         '404':
           description: Vaga not found
+      security:
+        - api_key: []
+        - vaga_auth:
+            - "write:vagas"
+            - "read:vagas"    
     put:
       tags:
       - "vagas"
@@ -51,7 +58,7 @@ paths:
       description: "Alterar vaga por Id"
       operationId: "updateVagaById"
       parameters:
-      - name: "vagasId"
+      - name: "vagaId"
         in: "path"
         description: "ID de uma vaga para retornar"
         required: true
@@ -72,6 +79,11 @@ paths:
           description: "Vaga inválida"
         '404':
           description: "Vaga não encontrada"
+      security:
+        - api_key: []
+        - vaga_auth:
+            - "write:vagas"
+            - "read:vagas"    
     delete:
       tags:
       - "vagas"
@@ -79,7 +91,7 @@ paths:
       description: "Deletar vaga por Id"
       operationId: "deleteVagaById"
       parameters:
-      - name: "vagasId"
+      - name: "vagaId"
         in: "path"
         description: "The name that needs to be deleted"
         required: true
@@ -118,9 +130,127 @@ paths:
         '405':
           description: "Invalido input"
       security:
-      - vaga_auth:
-        - "write:vagas"
-        - "read:vagas"
+        - api_key: []  
+        - vaga_auth:
+          - "write:vagas"
+          - "read:vagas"
+  /moradores/{moradorId}:
+    get:
+      tags:
+        - "moradores"
+      summary: "Encontra morador by ID"
+      description: "Retorna um morador simples"
+      operationId: "getMoradorById"
+      parameters:
+        - name: "moradorId"
+          in: "path"
+          description: "ID de um morador para retornar"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        '200':
+          description: "successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MoradorDto'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/MoradorDto'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Morador not found
+      security:
+        - api_key: []
+        - vaga_auth:
+            - "write:moradores"
+            - "read:moradores"    
+    put:
+      tags:
+        - "moradores"
+      summary: "Alterar morador por Id"
+      description: "Alterar morador por Id"
+      operationId: "updateMoradorById"
+      parameters:
+        - name: "moradorId"
+          in: "path"
+          description: "ID de um morador para retornar"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        description: "Objecto Morador que precisa ser alterado"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MoradorDto"
+      responses:
+        '204':
+          description: "successful operation"
+        '400':
+          description: "Morador inválido"
+        '404':
+          description: "Morador não encontrado"
+      security:
+        - api_key: []
+        - vaga_auth:
+            - "write:moradores"
+            - "read:moradores"    
+    delete:
+      tags:
+      - "moradores"
+      summary: "Deletar morador por Id"
+      description: "Deletar morador por Id"
+      operationId: "deleteMoradorById"
+      parameters:
+      - name: "moradorId"
+        in: "path"
+        description: "Objecto Morador que precisa ser deletado"
+        required: true
+        schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        '204':
+          description: "successful operation"
+        '400':
+          description: "Invalid vaga id"
+        '404':
+          description: "Vaga não encontrada"  
+      security:
+        - api_key: []
+        - vaga_auth:
+            - "write:moradores"
+            - "read:moradores"
+  /moradores:
+    post:
+      tags:
+      - "moradores"
+      summary: "Adiciona um novo morador"
+      description: "Adiciona um novo morador"
+      operationId: "addMorador"
+      requestBody:
+        description: "Objecto Morador que precisa ser adicionado"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MoradorDto"
+      responses:
+        '201':
+          description: "successful operation"
+        '405':
+          description: "Invalido input"
+      security:
+        - api_key: []  
+        - vaga_auth:
+          - "write:moradores"
+          - "read:moradores"
 components:
   schemas:
     Vaga:
@@ -175,6 +305,25 @@ components:
           type: integer
           format: int64
           description: código do veiculo que utiliza a vaga
+    MoradorDto:
+      required:
+        - nomeDoMorador
+        - apartamento
+        - bloco
+      type: object
+      properties:
+        nomeDoMorador:
+          type: string
+          example: João
+          description: nome do morador
+        apartamento:
+          type: string
+          example: 34
+          description: apartamento do morador
+        bloco:
+          type: string
+          example: Bloco D
+          description: bloco do morador  
   securitySchemes:
     vaga_auth:
       type: oauth2
@@ -184,6 +333,8 @@ components:
           scopes:
             write:vagas: modify vagas in your account
             read:vagas: read your vagas
+            write:moradores: modify moradores in your account
+            read:moradores: read your moradores
     api_key:
       type: apiKey
       name: api_key

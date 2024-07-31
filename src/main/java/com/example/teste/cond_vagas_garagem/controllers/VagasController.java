@@ -1,14 +1,23 @@
 package com.example.teste.cond_vagas_garagem.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.teste.springswaggercodegen3.api.VagasApi;
-import com.example.teste.springswaggercodegen3.model.Vaga;
 import com.example.teste.springswaggercodegen3.model.VagaDto;
 
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
 
 
+@RestController
+@RequestMapping("/vagas")
 public class VagasController implements VagasApi {
 	
 	
@@ -17,25 +26,29 @@ public class VagasController implements VagasApi {
 	}
 	
 	@Override
-	public ResponseEntity<Void> _addVaga(@Valid VagaDto vaga) {
+	@PostMapping
+	public ResponseEntity<Void> _addVaga(@RequestBody @Valid VagaDto vaga) {
 		// TODO Auto-generated method stub
 		return VagasApi.super._addVaga(vaga);
 	}
 	
 	@Override
-	public ResponseEntity<VagaDto> _getVagaById(Long vagasId) {
+	@GetMapping("/{vagasId}")
+	public ResponseEntity<VagaDto> _getVagaById(@PathVariable(value = "vagasId") Long vagasId) {
 		// TODO Auto-generated method stub
 		return VagasApi.super._getVagaById(vagasId);
 	}
 	
 	@Override
-	public ResponseEntity<Void> _updateVagaById(Long vagasId, @Valid VagaDto vaga) {
+	@PutMapping("/{vagasId}")
+	public ResponseEntity<Void> _updateVagaById(@PathVariable(value = "vagasId") Long vagasId, @Valid @RequestBody VagaDto vaga) {
 		// TODO Auto-generated method stub
 		return VagasApi.super._updateVagaById(vagasId, vaga);
 	}
 	
 	@Override
-	public ResponseEntity<Void> _deleteVagaById(Long vagasId) {
+	@DeleteMapping("/{vagasId}")
+	public ResponseEntity<Void> _deleteVagaById(@PathVariable(value = "vagasId") Long vagasId) {
 		// TODO Auto-generated method stub
 		return VagasApi.super._deleteVagaById(vagasId);
 	}
