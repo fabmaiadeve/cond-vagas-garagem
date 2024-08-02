@@ -18,10 +18,10 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/vagas")
-public class VagasController implements VagasApi {
+public class VagaController implements VagasApi {
 	
 	
-	public VagasController() {
+	public VagaController() {
 		// TODO Auto-generated constructor stub
 	}
 	

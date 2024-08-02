@@ -18,9 +18,9 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/moradores")
-public class MoradoresController implements MoradoresApi {
+public class MoradorController implements MoradoresApi {
 	
-	public MoradoresController() {
+	public MoradorController() {
 		// TODO Auto-generated constructor stub
 	}
 	
