@@ -6,11 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.teste.cond_vagas_garagem.dtos.MoradorDto;
+import com.example.teste.cond_vagas_garagem.exceptions.NotFoundObjectException;
+import com.example.teste.cond_vagas_garagem.exceptions.NotNullableFieldsException;
 import com.example.teste.cond_vagas_garagem.models.Morador;
 import com.example.teste.cond_vagas_garagem.repositories.MoradorRepository;
 
 import jakarta.transaction.Transactional;
-
 
 
 @Service
@@ -31,6 +32,7 @@ public class MoradorService {
 				moradorDto.getApartamento(), 
 				moradorDto.getBloco());
 		
+		validateFields(morador);
 		return moradorRepository.save(morador);
 	}
 	
@@ -39,7 +41,7 @@ public class MoradorService {
 		Optional<Morador> moradorOpt = moradorRepository.findById(id);
 		
 		if(moradorOpt.isEmpty()) {
-			
+			throw new NotFoundObjectException("O id: "+ id.toString() +" não se encontra na base de dados!");  
 		}
 		
 		return moradorOpt;
@@ -53,6 +55,8 @@ public class MoradorService {
 		uptMorador.setApartamento(moradorDto.getApartamento());
 		uptMorador.setBloco(moradorDto.getBloco());
 		
+		validateFields(uptMorador);
+		
 		uptMorador.setId(id);		
 		return moradorRepository.save(uptMorador);
 	}
@@ -62,5 +66,16 @@ public class MoradorService {
 		
 		Morador deleteMorador = this.getById(id).get();
 		moradorRepository.deleteById(deleteMorador.getId());
+	}
+	
+	private void validateFields(Morador morador) {
+		
+		if(morador.getNomeDoMorador() == null || morador.getNomeDoMorador().isBlank()) {
+			throw new NotNullableFieldsException("O campo do nome do morador não pode ser nulo ou vazio!");
+		} else if(morador.getApartamento() == null || morador.getApartamento().isBlank()) {
+			throw new NotNullableFieldsException("O campo de apartamento não pode ser nulo ou vazio!");
+		} else if(morador.getBloco() == null || morador.getBloco().isBlank()) {
+			throw new NotNullableFieldsException("O campo de bloco não pode ser nulo ou vazio!");
+		}		
 	}
 }
