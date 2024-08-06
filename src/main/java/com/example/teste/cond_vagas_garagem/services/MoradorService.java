@@ -36,21 +36,20 @@ public class MoradorService {
 		return moradorRepository.save(morador);
 	}
 	
-	public Optional<Morador> getById(Long id) {
+	public Optional<Morador> getMoradorById(Long id) {
 		
 		Optional<Morador> moradorOpt = moradorRepository.findById(id);
 		
 		if(moradorOpt.isEmpty()) {
 			throw new NotFoundObjectException("O id: "+ id.toString() +" não se encontra na base de dados!");  
-		}
-		
+		}		
 		return moradorOpt;
 	}
 	
 	@Transactional
-	public Morador updateById(Long id, MoradorDto moradorDto) {
+	public Morador updateMoradorById(Long id, MoradorDto moradorDto) {
 		
-		Morador uptMorador = this.getById(id).get();
+		Morador uptMorador = this.getMoradorById(id).get();
 		uptMorador.setNomeDoMorador(moradorDto.getNomeDoMorador());
 		uptMorador.setApartamento(moradorDto.getApartamento());
 		uptMorador.setBloco(moradorDto.getBloco());
@@ -62,9 +61,9 @@ public class MoradorService {
 	}
 	
 	@Transactional
-	public void deleteById(Long id) {
+	public void deleteMoradorById(Long id) {
 		
-		Morador deleteMorador = this.getById(id).get();
+		Morador deleteMorador = this.getMoradorById(id).get();
 		moradorRepository.deleteById(deleteMorador.getId());
 	}
 	
