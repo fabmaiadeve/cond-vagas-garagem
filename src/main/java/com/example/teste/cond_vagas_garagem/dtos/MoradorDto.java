@@ -13,7 +13,6 @@ public class MoradorDto {
 	}
 
 	public MoradorDto(String nomeDoMorador, String apartamento, String bloco) {
-		super();
 		this.nomeDoMorador = nomeDoMorador;
 		this.apartamento = apartamento;
 		this.bloco = bloco;
