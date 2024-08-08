@@ -32,32 +32,29 @@ public class VagaController {
 		this.vagaService = vagaService;
 	}
 	
-	//@Override
 	@PostMapping
-	public ResponseEntity<Vaga> _addVaga(@RequestBody @Valid VagaDto vagaDto) {
+	public ResponseEntity<Vaga> addVaga(@RequestBody VagaDto vagaDto) {
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(vagaService.saveVaga(vagaDto));
 	}
 	
-	//@Override
 	@GetMapping("/{vagasId}")
-	public ResponseEntity<Vaga> _getVagaById(@PathVariable(value = "vagasId") Long vagasId) {
+	public ResponseEntity<Vaga> getVagaById(@PathVariable(value = "vagasId") Long vagasId) {
 		
 		Optional<Vaga> vagaOpt = vagaService.getVagaById(vagasId);
 		return ResponseEntity.status(HttpStatus.OK).body(vagaOpt.get());
 	}
 	
-	//@Override
 	@PutMapping("/{vagasId}")
-	public ResponseEntity<Vaga> _updateVagaById(@PathVariable(value = "vagasId") Long vagasId, @Valid @RequestBody VagaDto vagaDto) {
+	public ResponseEntity<Vaga> updateVagaById(@PathVariable(value = "vagasId") Long vagasId, @Valid @RequestBody VagaDto vagaDto) {
 		
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(vagaService.updateVagaById(vagasId, vagaDto));
 	}
 	
-	//@Override
 	@DeleteMapping("/{vagasId}")
-	public ResponseEntity<Void> _deleteVagaById(@PathVariable(value = "vagasId") Long vagasId) {
+	public ResponseEntity<Void> deleteVagaById(@PathVariable(value = "vagasId") Long vagasId) {
 		
+		vagaService.deleteVagaById(vagasId);
 		return ResponseEntity.noContent().build(); 
 	}	
 }

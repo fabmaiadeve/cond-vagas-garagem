@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import com.example.teste.cond_vagas_garagem.dtos.VagaDto;
 import com.example.teste.cond_vagas_garagem.exceptions.NotFoundObjectException;
 import com.example.teste.cond_vagas_garagem.exceptions.NotNullableFieldsException;
+import com.example.teste.cond_vagas_garagem.models.Morador;
 import com.example.teste.cond_vagas_garagem.models.Vaga;
 import com.example.teste.cond_vagas_garagem.repositories.VagaRepository;
-
 
 import jakarta.transaction.Transactional;
 
@@ -20,18 +20,24 @@ public class VagaService {
 	@Autowired
 	private VagaRepository vagaRepository;
 	
-	public VagaService(VagaRepository vagaRepository) {
+	@Autowired
+	private MoradorService moradorService;
+	
+	public VagaService(VagaRepository vagaRepository, MoradorService moradorService) {
 		this.vagaRepository = vagaRepository;
+		this.moradorService = moradorService;
 	}
 	
 	@Transactional
 	public Vaga saveVaga(VagaDto vagaDto) {
 		
+		Morador objMorador = moradorService.getMoradorById(vagaDto.getMoradorId()).get();
+		
 		Vaga vaga = new Vaga(
 				vagaDto.getNumeroDaVaga(), 
 				vagaDto.getEhAlugada(), 
 				vagaDto.getMoradorQueAlugou(), 
-				vagaDto.getMoradorId(), 
+				objMorador, 
 				vagaDto.getVeiculoId());
 		
 		validateFields(vaga);
@@ -55,7 +61,7 @@ public class VagaService {
 		uptVaga.setNumeroDaVaga(vagaDto.getNumeroDaVaga());
 		uptVaga.setEhAlugada(vagaDto.getEhAlugada());
 		uptVaga.setMoradorQueAlugou(vagaDto.getMoradorQueAlugou());
-		uptVaga.setMoradorId(vagaDto.getMoradorId());
+		uptVaga.setMorador(moradorService.getMoradorById(vagaDto.getMoradorId()).get());
 		uptVaga.setVeiculoId(vagaDto.getVeiculoId());
 		
 		validateFields(uptVaga);
@@ -79,7 +85,7 @@ public class VagaService {
 			throw new NotNullableFieldsException("O campo eh alugada não pode ser nulo!");
 		} else if(vaga.getEhAlugada() == true && vaga.getMoradorQueAlugou() == null) {
 			throw new NotNullableFieldsException("O campo morador que alugou não pode ser nulo!");
-		} else if(vaga.getMoradorId() == null) {
+		} else if(vaga.getMorador().getId() == null) {
 			throw new NotNullableFieldsException("O campo morador não pode ser nulo!");
 		}		
 	}

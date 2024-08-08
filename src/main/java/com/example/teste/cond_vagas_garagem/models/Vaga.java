@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,19 +22,21 @@ public class Vaga {
 	
 	private Long moradorQueAlugou;
 
-	private Long moradorId;
+	@OneToOne
+	@JoinColumn(name = "morador_id", referencedColumnName = "id") 
+	private Morador morador;
 
 	private Long veiculoId;
 	
 	public Vaga() {
 	}
 
-	public Vaga(String numeroDaVaga, Boolean ehAlugada, Long moradorQueAlugou, Long moradorId, Long veiculoId) {
+	public Vaga(String numeroDaVaga, Boolean ehAlugada, Long moradorQueAlugou, Morador morador, Long veiculoId) {
 		super();
 		this.numeroDaVaga = numeroDaVaga;
 		this.ehAlugada = ehAlugada;
 		this.moradorQueAlugou = moradorQueAlugou;
-		this.moradorId = moradorId;
+		this.morador = morador;
 		this.veiculoId = veiculoId;
 	}
 
@@ -68,12 +72,12 @@ public class Vaga {
 		this.moradorQueAlugou = moradorQueAlugou;
 	}
 
-	public Long getMoradorId() {
-		return moradorId;
+	public Morador getMorador() {
+		return morador;
 	}
 
-	public void setMoradorId(Long moradorId) {
-		this.moradorId = moradorId;
+	public void setMorador(Morador morador) {
+		this.morador = morador;
 	}
 
 	public Long getVeiculoId() {
@@ -87,6 +91,6 @@ public class Vaga {
 	@Override
 	public String toString() {
 		return "Vaga [id=" + id + ", numeroDaVaga=" + numeroDaVaga + ", ehAlugada=" + ehAlugada + ", moradorQueAlugou="
-				+ moradorQueAlugou + ", moradorId=" + moradorId + ", veiculoId=" + veiculoId + "]";
+				+ moradorQueAlugou + ", morador=" + morador + ", veiculoId=" + veiculoId + "]";
 	}
 }

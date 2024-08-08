@@ -1,9 +1,11 @@
 package com.example.teste.cond_vagas_garagem.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,6 +21,9 @@ public class Morador {
 	private String apartamento;
 	
 	private String bloco;
+	
+	@OneToOne(mappedBy = "morador", cascade = CascadeType.ALL)
+	private Vaga vaga;
 	
 	public Morador() {
 	}
@@ -60,6 +65,14 @@ public class Morador {
 
 	public void setBloco(String bloco) {
 		this.bloco = bloco;
+	}
+
+	public Vaga getVaga() {
+		return vaga;
+	}
+
+	public void setVaga(Vaga vaga) {
+		this.vaga = vaga;
 	}
 
 	@Override
