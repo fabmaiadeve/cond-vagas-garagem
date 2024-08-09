@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.teste.cond_vagas_garagem.CondVagasGaragemApplication;
 import com.example.teste.cond_vagas_garagem.dtos.VagaDto;
 import com.example.teste.cond_vagas_garagem.exceptions.NotFoundObjectException;
 import com.example.teste.cond_vagas_garagem.exceptions.NotNullableFieldsException;
@@ -29,7 +30,7 @@ public class VagaService {
 	}
 	
 	@Transactional
-	public Vaga saveVaga(VagaDto vagaDto) {
+	public VagaDto saveVaga(VagaDto vagaDto) {
 		
 		Morador objMorador = moradorService.getMoradorById(vagaDto.getMoradorId()).get();
 		
@@ -41,23 +42,31 @@ public class VagaService {
 				vagaDto.getVeiculoId());
 		
 		validateFields(vaga);
-		return vagaRepository.save(vaga);
+		vagaRepository.save(vaga);
+		
+		VagaDto vagaDtoResponse = new VagaDto(
+				vaga.getNumeroDaVaga(), 
+				vaga.getEhAlugada(), 
+				vaga.getMoradorQueAlugou(), 
+				vaga.getMorador().getId(), 
+				vaga.getVeiculoId());
+		return vagaDtoResponse;		 
 	}
 
-	public Optional<Vaga> getVagaById(Long id) {
+	public Vaga getVagaById(Long id) {
 		
 		Optional<Vaga> vagaOpt = vagaRepository.findById(id);
 		
 		if(vagaOpt.isEmpty()) {
 			throw new NotFoundObjectException("O id: "+ id.toString() +" não se encontra na base de Dados");
 		}
-		return vagaOpt;
+		return vagaOpt.get();
 	}
 	
 	@Transactional
 	public Vaga updateVagaById(Long id, VagaDto vagaDto) {
 		
-		Vaga uptVaga = this.getVagaById(id).get();
+		Vaga uptVaga = this.getVagaById(id);
 		uptVaga.setNumeroDaVaga(vagaDto.getNumeroDaVaga());
 		uptVaga.setEhAlugada(vagaDto.getEhAlugada());
 		uptVaga.setMoradorQueAlugou(vagaDto.getMoradorQueAlugou());
@@ -73,7 +82,7 @@ public class VagaService {
 	@Transactional
 	public void deleteVagaById(Long id) {
 		
-		Vaga deleteVaga = this.getVagaById(id).get();
+		Vaga deleteVaga = this.getVagaById(id);
 		vagaRepository.deleteById(deleteVaga.getId());
 	}
 	

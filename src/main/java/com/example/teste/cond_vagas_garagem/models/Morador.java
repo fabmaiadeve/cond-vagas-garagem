@@ -1,5 +1,8 @@
 package com.example.teste.cond_vagas_garagem.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +26,7 @@ public class Morador {
 	private String bloco;
 	
 	@OneToOne(mappedBy = "morador", cascade = CascadeType.ALL)
+	@JsonManagedReference
 	private Vaga vaga;
 	
 	public Morador() {

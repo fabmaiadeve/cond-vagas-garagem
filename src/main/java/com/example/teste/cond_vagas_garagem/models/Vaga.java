@@ -1,5 +1,7 @@
 package com.example.teste.cond_vagas_garagem.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,7 +25,8 @@ public class Vaga {
 	private Long moradorQueAlugou;
 
 	@OneToOne
-	@JoinColumn(name = "morador_id", referencedColumnName = "id") 
+	@JoinColumn(name = "morador_id", referencedColumnName = "id")
+	@JsonBackReference
 	private Morador morador;
 
 	private Long veiculoId;

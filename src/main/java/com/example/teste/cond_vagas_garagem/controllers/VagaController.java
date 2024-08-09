@@ -1,7 +1,5 @@
 package com.example.teste.cond_vagas_garagem.controllers;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,22 +31,27 @@ public class VagaController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Vaga> addVaga(@RequestBody VagaDto vagaDto) {
+	public ResponseEntity<VagaDto> addVaga(@RequestBody VagaDto vagaDto) {
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(vagaService.saveVaga(vagaDto));
 	}
 	
 	@GetMapping("/{vagasId}")
-	public ResponseEntity<Vaga> getVagaById(@PathVariable(value = "vagasId") Long vagasId) {
+	public ResponseEntity<VagaDto> getVagaById(@PathVariable(value = "vagasId") Long vagasId) {
 		
-		Optional<Vaga> vagaOpt = vagaService.getVagaById(vagasId);
-		return ResponseEntity.status(HttpStatus.OK).body(vagaOpt.get());
+		Vaga vaga = vagaService.getVagaById(vagasId);
+		VagaDto vagaResponse = new VagaDto(vaga.getNumeroDaVaga(), vaga.getEhAlugada(), vaga.getMoradorQueAlugou(), vaga.getMorador().getId(), vaga.getVeiculoId());
+		
+		return ResponseEntity.status(HttpStatus.OK).body(vagaResponse);
 	}
 	
 	@PutMapping("/{vagasId}")
-	public ResponseEntity<Vaga> updateVagaById(@PathVariable(value = "vagasId") Long vagasId, @Valid @RequestBody VagaDto vagaDto) {
+	public ResponseEntity<VagaDto> updateVagaById(@PathVariable(value = "vagasId") Long vagasId, @Valid @RequestBody VagaDto vagaDto) {
 		
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(vagaService.updateVagaById(vagasId, vagaDto));
+		Vaga vaga = vagaService.updateVagaById(vagasId, vagaDto);
+		VagaDto vagaResponse = new VagaDto(vaga.getNumeroDaVaga(), vaga.getEhAlugada(), vaga.getMoradorQueAlugou(), vaga.getMorador().getId(), vaga.getVeiculoId());
+		
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(vagaResponse);
 	}
 	
 	@DeleteMapping("/{vagasId}")
