@@ -1,7 +1,5 @@
 package com.example.teste.cond_vagas_garagem.controllers;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,22 +31,25 @@ public class MoradorController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Morador> addMorador(@RequestBody MoradorDto moradorDto) {
+	public ResponseEntity<MoradorDto> addMorador(@RequestBody MoradorDto moradorDto) {
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(moradorService.saveMorador(moradorDto));
 	}
 	
 	@GetMapping("/{moradorId}")
-	public ResponseEntity<Morador> getMoradorById(@PathVariable (value = "moradorId") Long moradorId) {
+	public ResponseEntity<MoradorDto> getMoradorById(@PathVariable (value = "moradorId") Long moradorId) {
 		
-		Optional<Morador> moradorOpt = moradorService.getMoradorById(moradorId);
-		return ResponseEntity.status(HttpStatus.OK).body(moradorOpt.get());
+		Morador morador = moradorService.getMoradorById(moradorId);
+		MoradorDto moradorResponse = new MoradorDto(morador.getNomeDoMorador(), morador.getApartamento(), morador.getBloco());
+		return ResponseEntity.status(HttpStatus.OK).body(moradorResponse);
 	}
 	
 	@PutMapping("/{moradorId}")
-	public ResponseEntity<Morador> updateMoradorById(@PathVariable (value = "moradorId") Long moradorId, @RequestBody @Valid MoradorDto moradorDto) {
+	public ResponseEntity<MoradorDto> updateMoradorById(@PathVariable (value = "moradorId") Long moradorId, @RequestBody @Valid MoradorDto moradorDto) {
 		
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(moradorService.updateMoradorById(moradorId, moradorDto));
+		Morador morador = moradorService.updateMoradorById(moradorId, moradorDto);
+		MoradorDto moradorResponse = new MoradorDto(morador.getNomeDoMorador(), morador.getApartamento(), morador.getBloco());
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(moradorResponse);
 	}
 	
 	@DeleteMapping("/{moradorId}")

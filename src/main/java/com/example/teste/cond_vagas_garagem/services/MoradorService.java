@@ -25,7 +25,7 @@ public class MoradorService {
 	}
 	
 	@Transactional
-	public Morador saveMorador(MoradorDto moradorDto) {
+	public MoradorDto saveMorador(MoradorDto moradorDto) {
 		
 		Morador morador = new Morador(
 				moradorDto.getNomeDoMorador(), 
@@ -33,23 +33,29 @@ public class MoradorService {
 				moradorDto.getBloco());
 		
 		validateFields(morador);
-		return moradorRepository.save(morador);
+		moradorRepository.save(morador);
+		
+		MoradorDto moradorDtoResponse = new MoradorDto(
+				morador.getNomeDoMorador(),
+				morador.getApartamento(),
+				morador.getBloco());
+		return moradorDtoResponse;
 	}
 	
-	public Optional<Morador> getMoradorById(Long id) {
+	public Morador getMoradorById(Long id) {
 		
 		Optional<Morador> moradorOpt = moradorRepository.findById(id);
 		
 		if(moradorOpt.isEmpty()) {
 			throw new NotFoundObjectException("O id: "+ id.toString() +" não se encontra na base de dados!");  
 		}		
-		return moradorOpt;
+		return moradorOpt.get();
 	}
 	
 	@Transactional
 	public Morador updateMoradorById(Long id, MoradorDto moradorDto) {
 		
-		Morador uptMorador = this.getMoradorById(id).get();
+		Morador uptMorador = this.getMoradorById(id);
 		uptMorador.setNomeDoMorador(moradorDto.getNomeDoMorador());
 		uptMorador.setApartamento(moradorDto.getApartamento());
 		uptMorador.setBloco(moradorDto.getBloco());
@@ -63,7 +69,7 @@ public class MoradorService {
 	@Transactional
 	public void deleteMoradorById(Long id) {
 		
-		Morador deleteMorador = this.getMoradorById(id).get();
+		Morador deleteMorador = this.getMoradorById(id);
 		moradorRepository.deleteById(deleteMorador.getId());
 	}
 	

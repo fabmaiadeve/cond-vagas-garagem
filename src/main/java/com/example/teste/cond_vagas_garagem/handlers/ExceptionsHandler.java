@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.example.teste.cond_vagas_garagem.dtos.ErrorDto;
+import com.example.teste.cond_vagas_garagem.exceptions.JdbcSQLIntegrityConstraintViolationException;
 import com.example.teste.cond_vagas_garagem.exceptions.NotFoundObjectException;
 import com.example.teste.cond_vagas_garagem.exceptions.NotNullableFieldsException;
 
@@ -25,5 +26,12 @@ public class ExceptionsHandler {
 	@ExceptionHandler(NotNullableFieldsException.class)
 	public ErrorDto handler(NotNullableFieldsException ex) {
 		return new ErrorDto(ex.getMessage(), HttpStatus.NOT_ACCEPTABLE.value());
+	}
+	
+	@ResponseStatus(HttpStatus.CONFLICT)
+	@ResponseBody
+	@ExceptionHandler(JdbcSQLIntegrityConstraintViolationException.class)
+	public ErrorDto handler(JdbcSQLIntegrityConstraintViolationException ex) {
+		return new ErrorDto(ex.getMessage(), HttpStatus.CONFLICT.value());
 	}
 }

@@ -1,6 +1,5 @@
 package com.example.teste.cond_vagas_garagem.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;

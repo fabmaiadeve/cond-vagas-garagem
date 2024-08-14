@@ -32,7 +32,7 @@ public class VagaService {
 	@Transactional
 	public VagaDto saveVaga(VagaDto vagaDto) {
 		
-		Morador objMorador = moradorService.getMoradorById(vagaDto.getMoradorId()).get();
+		Morador objMorador = moradorService.getMoradorById(vagaDto.getMoradorId());
 		
 		Vaga vaga = new Vaga(
 				vagaDto.getNumeroDaVaga(), 
@@ -70,7 +70,7 @@ public class VagaService {
 		uptVaga.setNumeroDaVaga(vagaDto.getNumeroDaVaga());
 		uptVaga.setEhAlugada(vagaDto.getEhAlugada());
 		uptVaga.setMoradorQueAlugou(vagaDto.getMoradorQueAlugou());
-		uptVaga.setMorador(moradorService.getMoradorById(vagaDto.getMoradorId()).get());
+		uptVaga.setMorador(moradorService.getMoradorById(vagaDto.getMoradorId()));
 		uptVaga.setVeiculoId(vagaDto.getVeiculoId());
 		
 		validateFields(uptVaga);
