@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.teste.cond_vagas_garagem.CondVagasGaragemApplication;
 import com.example.teste.cond_vagas_garagem.dtos.VagaDto;
+import com.example.teste.cond_vagas_garagem.exceptions.ConstraintViolationException;
 import com.example.teste.cond_vagas_garagem.exceptions.NotFoundObjectException;
 import com.example.teste.cond_vagas_garagem.exceptions.NotNullableFieldsException;
 import com.example.teste.cond_vagas_garagem.models.Morador;
@@ -31,6 +31,8 @@ public class VagaService {
 	
 	@Transactional
 	public VagaDto saveVaga(VagaDto vagaDto) {
+		
+		verificaMoradorTemVaga(vagaDto.getMoradorId());
 		
 		Morador objMorador = moradorService.getMoradorById(vagaDto.getMoradorId());
 		
@@ -84,6 +86,15 @@ public class VagaService {
 		
 		Vaga deleteVaga = this.getVagaById(id);
 		vagaRepository.deleteById(deleteVaga.getId());
+	}
+	
+	private void verificaMoradorTemVaga(Long moradorId) {
+		
+		Optional<Vaga> optVagaByMoradorId = vagaRepository.findByMoradorId(moradorId);
+		
+		if(!optVagaByMoradorId.isEmpty()) {
+			throw new ConstraintViolationException("Não é possivel fazer a inserção porque o moradorId :" + moradorId + " já se encontra associada a uma vaga cadastrada!");
+		}		
 	}
 	
 	private void validateFields(Vaga vaga) {
