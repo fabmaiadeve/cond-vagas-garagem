@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.example.teste.cond_vagas_garagem.dtos.ErrorDto;
 import com.example.teste.cond_vagas_garagem.exceptions.ConstraintViolationException;
-import com.example.teste.cond_vagas_garagem.exceptions.JdbcSQLIntegrityConstraintViolationException;
 import com.example.teste.cond_vagas_garagem.exceptions.NotFoundObjectException;
 import com.example.teste.cond_vagas_garagem.exceptions.NotNullableFieldsException;
 

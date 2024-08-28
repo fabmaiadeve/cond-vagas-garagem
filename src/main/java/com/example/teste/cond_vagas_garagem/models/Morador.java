@@ -1,5 +1,8 @@
 package com.example.teste.cond_vagas_garagem.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -7,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -27,6 +31,9 @@ public class Morador {
 	@OneToOne(mappedBy = "morador", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private Vaga vaga;
+	
+	@OneToMany(mappedBy = "morador", cascade = CascadeType.ALL)
+	private List<Veiculo> veiculos = new ArrayList<>();
 	
 	public Morador() {
 	}
