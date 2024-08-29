@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,6 +30,8 @@ public class Veiculo {
 	@JoinColumn(name = "morador_id", referencedColumnName = "id")
 	private Morador morador;
 	
+	@OneToOne
+	@JoinColumn(name = "vaga_id", referencedColumnName = "id", unique = true)
 	private Vaga vaga;
 	
 	public Veiculo() {

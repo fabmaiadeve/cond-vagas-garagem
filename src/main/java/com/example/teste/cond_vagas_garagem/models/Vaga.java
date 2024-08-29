@@ -29,18 +29,19 @@ public class Vaga {
 	@JsonBackReference
 	private Morador morador;
 
-	private Long veiculoId;
+	@OneToOne(mappedBy = "vaga")
+	private Veiculo veiculo;
 	
 	public Vaga() {
 	}
 
-	public Vaga(String numeroDaVaga, Boolean ehAlugada, Long moradorQueAlugou, Morador morador, Long veiculoId) {
+	public Vaga(String numeroDaVaga, Boolean ehAlugada, Long moradorQueAlugou, Morador morador, Veiculo veiculo) {
 		super();
 		this.numeroDaVaga = numeroDaVaga;
 		this.ehAlugada = ehAlugada;
 		this.moradorQueAlugou = moradorQueAlugou;
 		this.morador = morador;
-		this.veiculoId = veiculoId;
+		this.veiculo = veiculo;
 	}
 
 	public Long getId() {
@@ -83,17 +84,17 @@ public class Vaga {
 		this.morador = morador;
 	}
 
-	public Long getVeiculoId() {
-		return veiculoId;
+	public Veiculo getVeiculo() {
+		return veiculo;
 	}
 
-	public void setVeiculoId(Long veiculoId) {
-		this.veiculoId = veiculoId;
+	public void setVeiculo(Veiculo veiculo) {
+		this.veiculo = veiculo;
 	}
 
 	@Override
 	public String toString() {
 		return "Vaga [id=" + id + ", numeroDaVaga=" + numeroDaVaga + ", ehAlugada=" + ehAlugada + ", moradorQueAlugou="
-				+ moradorQueAlugou + ", morador=" + morador + ", veiculoId=" + veiculoId + "]";
+				+ moradorQueAlugou + ", morador=" + morador + ", veiculo=" + veiculo + "]";
 	}
 }

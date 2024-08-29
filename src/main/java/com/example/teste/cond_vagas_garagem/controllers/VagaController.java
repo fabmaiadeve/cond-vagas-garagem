@@ -40,7 +40,7 @@ public class VagaController {
 	public ResponseEntity<VagaDto> getVagaById(@PathVariable(value = "vagasId") Long vagasId) {
 		
 		Vaga vaga = vagaService.getVagaById(vagasId);
-		VagaDto vagaResponse = new VagaDto(vaga.getNumeroDaVaga(), vaga.getEhAlugada(), vaga.getMoradorQueAlugou(), vaga.getMorador().getId(), vaga.getVeiculoId());
+		VagaDto vagaResponse = new VagaDto(vaga.getNumeroDaVaga(), vaga.getEhAlugada(), vaga.getMoradorQueAlugou(), vaga.getMorador().getId(), vaga.getVeiculo().getId());
 		return ResponseEntity.status(HttpStatus.OK).body(vagaResponse);
 	}
 	
@@ -48,7 +48,7 @@ public class VagaController {
 	public ResponseEntity<VagaDto> updateVagaById(@PathVariable(value = "vagasId") Long vagasId, @Valid @RequestBody VagaDto vagaDto) {
 		
 		Vaga vaga = vagaService.updateVagaById(vagasId, vagaDto);
-		VagaDto vagaResponse = new VagaDto(vaga.getNumeroDaVaga(), vaga.getEhAlugada(), vaga.getMoradorQueAlugou(), vaga.getMorador().getId(), vaga.getVeiculoId());		
+		VagaDto vagaResponse = new VagaDto(vaga.getNumeroDaVaga(), vaga.getEhAlugada(), vaga.getMoradorQueAlugou(), vaga.getMorador().getId(), vaga.getVeiculo().getId());		
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(vagaResponse);
 	}
 	
