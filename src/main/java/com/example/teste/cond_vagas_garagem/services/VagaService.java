@@ -11,7 +11,6 @@ import com.example.teste.cond_vagas_garagem.exceptions.NotFoundObjectException;
 import com.example.teste.cond_vagas_garagem.exceptions.NotNullableFieldsException;
 import com.example.teste.cond_vagas_garagem.models.Morador;
 import com.example.teste.cond_vagas_garagem.models.Vaga;
-import com.example.teste.cond_vagas_garagem.models.Veiculo;
 import com.example.teste.cond_vagas_garagem.repositories.VagaRepository;
 
 import jakarta.transaction.Transactional;
@@ -23,15 +22,12 @@ public class VagaService {
 	private VagaRepository vagaRepository;
 	
 	@Autowired
-	private MoradorService moradorService;
+	private MoradorService moradorService;	
 	
-	@Autowired
-	private VeiculoService veiculoService;
 	
-	public VagaService(VagaRepository vagaRepository, MoradorService moradorService, VeiculoService veiculoService) {
+	public VagaService(VagaRepository vagaRepository, MoradorService moradorService) {
 		this.vagaRepository = vagaRepository;
 		this.moradorService = moradorService;
-		this.veiculoService = veiculoService;
 	}
 	
 	@Transactional
@@ -40,14 +36,12 @@ public class VagaService {
 		verificaMoradorTemVaga(vagaDto.getMoradorId());
 		
 		Morador objMorador = moradorService.getMoradorById(vagaDto.getMoradorId());
-		Veiculo objVeiculo = veiculoService.getVeiculoById(vagaDto.getVeiculoId());
-		
+				
 		Vaga vaga = new Vaga(
 				vagaDto.getNumeroDaVaga(), 
 				vagaDto.getEhAlugada(), 
 				vagaDto.getMoradorQueAlugou(), 
-				objMorador, 
-				objVeiculo);
+				objMorador);
 		
 		validateFields(vaga);
 		vagaRepository.save(vaga);
@@ -56,8 +50,7 @@ public class VagaService {
 				vaga.getNumeroDaVaga(), 
 				vaga.getEhAlugada(), 
 				vaga.getMoradorQueAlugou(), 
-				vaga.getMorador().getId(), 
-				vaga.getVeiculo().getId());
+				vaga.getMorador().getId());
 		return vagaDtoResponse;		 
 	}
 
@@ -79,7 +72,6 @@ public class VagaService {
 		uptVaga.setEhAlugada(vagaDto.getEhAlugada());
 		uptVaga.setMoradorQueAlugou(vagaDto.getMoradorQueAlugou());
 		uptVaga.setMorador(moradorService.getMoradorById(vagaDto.getMoradorId()));
-		uptVaga.setVeiculo(veiculoService.getVeiculoById(vagaDto.getVeiculoId()));
 		
 		validateFields(uptVaga);
 		

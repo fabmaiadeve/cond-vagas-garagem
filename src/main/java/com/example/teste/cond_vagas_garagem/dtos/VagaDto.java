@@ -10,18 +10,16 @@ public class VagaDto {
 	
 	private Long moradorId;
 	
-	private Long veiculoId;
 	
 	public VagaDto() {
 	}
 
-	public VagaDto(String numeroDaVaga, Boolean ehAlugada, Long moradorQueAlugou, Long moradorId, Long veiculoId) {
+	public VagaDto(String numeroDaVaga, Boolean ehAlugada, Long moradorQueAlugou, Long moradorId) {
 		super();
 		this.numeroDaVaga = numeroDaVaga;
 		this.ehAlugada = ehAlugada;
 		this.moradorQueAlugou = moradorQueAlugou;
 		this.moradorId = moradorId;
-		this.veiculoId = veiculoId;
 	}
 
 	public String getNumeroDaVaga() {
@@ -56,17 +54,9 @@ public class VagaDto {
 		this.moradorId = moradorId;
 	}
 
-	public Long getVeiculoId() {
-		return veiculoId;
-	}
-
-	public void setVeiculoId(Long veiculoId) {
-		this.veiculoId = veiculoId;
-	}
-
 	@Override
 	public String toString() {
 		return "VagaDto [numeroDaVaga=" + numeroDaVaga + ", ehAlugada=" + ehAlugada + ", moradorQueAlugou="
-				+ moradorQueAlugou + ", moradorId=" + moradorId + ", veiculoId=" + veiculoId + "]";
+				+ moradorQueAlugou + ", moradorId=" + moradorId + "]";
 	}
 }

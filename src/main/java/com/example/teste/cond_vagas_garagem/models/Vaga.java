@@ -2,6 +2,7 @@ package com.example.teste.cond_vagas_garagem.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,19 +30,18 @@ public class Vaga {
 	@JsonBackReference
 	private Morador morador;
 
-	@OneToOne(mappedBy = "vaga")
+	@OneToOne(mappedBy = "vaga", cascade = CascadeType.ALL)
 	private Veiculo veiculo;
 	
 	public Vaga() {
 	}
 
-	public Vaga(String numeroDaVaga, Boolean ehAlugada, Long moradorQueAlugou, Morador morador, Veiculo veiculo) {
+	public Vaga(String numeroDaVaga, Boolean ehAlugada, Long moradorQueAlugou, Morador morador) {
 		super();
 		this.numeroDaVaga = numeroDaVaga;
 		this.ehAlugada = ehAlugada;
 		this.moradorQueAlugou = moradorQueAlugou;
 		this.morador = morador;
-		this.veiculo = veiculo;
 	}
 
 	public Long getId() {
@@ -95,6 +95,6 @@ public class Vaga {
 	@Override
 	public String toString() {
 		return "Vaga [id=" + id + ", numeroDaVaga=" + numeroDaVaga + ", ehAlugada=" + ehAlugada + ", moradorQueAlugou="
-				+ moradorQueAlugou + ", morador=" + morador + ", veiculo=" + veiculo + "]";
+				+ moradorQueAlugou + ", morador=" + morador +"]";
 	}
 }
