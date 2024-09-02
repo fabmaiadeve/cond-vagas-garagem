@@ -71,7 +71,6 @@ public class VagaService {
 		uptVaga.setNumeroDaVaga(vagaDto.getNumeroDaVaga());
 		uptVaga.setEhAlugada(vagaDto.getEhAlugada());
 		uptVaga.setMoradorQueAlugou(vagaDto.getMoradorQueAlugou());
-		uptVaga.setMorador(moradorService.getMoradorById(vagaDto.getMoradorId()));
 		
 		validateFields(uptVaga);
 		
@@ -94,7 +93,7 @@ public class VagaService {
 			throw new ConstraintViolationException("Não é possivel fazer a inserção porque o moradorId :" + moradorId + " já se encontra associada a uma vaga cadastrada!");
 		}		
 	}
-	
+		
 	private void validateFields(Vaga vaga) {
 		
 		if(vaga.getNumeroDaVaga() == null || vaga.getNumeroDaVaga().isBlank()) {

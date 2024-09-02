@@ -68,6 +68,27 @@ public class VeiculoService {
 		}
 		return optVeiculo.get();
 	}
+	
+	@Transactional
+	public Veiculo updateVeiculoById(Long id, VeiculoDto veiculoDto) {
+		
+		Veiculo uptVeiculo = this.getVeiculoById(id);
+		uptVeiculo.setPlacaDoVeiculo(veiculoDto.getPlacaDoVeiculo());
+		uptVeiculo.setModeloDoVeiculo(veiculoDto.getModeloDoVeiculo());
+		uptVeiculo.setCorDoVeiculo(veiculoDto.getCorDoVeiculo());
+		
+		validateFields(uptVeiculo);
+		
+		uptVeiculo.setId(id);				
+		return veiculoRepository.save(uptVeiculo);
+	}
+	
+	@Transactional
+	public void deleteVeiculoById(Long id) {
+		
+		Veiculo deleteVeiculo = this.getVeiculoById(id);
+		veiculoRepository.deleteById(deleteVeiculo.getId());
+	}
 
 	private void validateFields(Veiculo veiculo) {
 		
