@@ -30,7 +30,7 @@ public class Vaga {
 	@JsonBackReference
 	private Morador morador;
 
-	@OneToOne(mappedBy = "vaga", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "vaga")
 	private Veiculo veiculo;
 	
 	public Vaga() {

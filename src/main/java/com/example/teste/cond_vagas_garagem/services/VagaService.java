@@ -82,6 +82,10 @@ public class VagaService {
 	public void deleteVagaById(Long id) {
 		
 		Vaga deleteVaga = this.getVagaById(id);
+		
+		if(deleteVaga.getVeiculo() != null) {
+			throw new ConstraintViolationException("Não é possível deletar a vaga pois existem veículos associados.");
+		}
 		vagaRepository.deleteById(deleteVaga.getId());
 	}
 	

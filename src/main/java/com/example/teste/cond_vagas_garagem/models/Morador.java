@@ -28,11 +28,11 @@ public class Morador {
 	
 	private String bloco;
 	
-	@OneToOne(mappedBy = "morador", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "morador")
 	@JsonManagedReference
 	private Vaga vaga;
 	
-	@OneToMany(mappedBy = "morador", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "morador")
 	private List<Veiculo> veiculos = new ArrayList<>();
 	
 	public Morador() {
@@ -85,9 +85,17 @@ public class Morador {
 		this.vaga = vaga;
 	}
 
+	public List<Veiculo> getVeiculos() {
+		return veiculos;
+	}
+
+	public void setVeiculos(List<Veiculo> veiculos) {
+		this.veiculos = veiculos;
+	}
+
 	@Override
 	public String toString() {
 		return "Morador [id=" + id + ", nomeDoMorador=" + nomeDoMorador + ", apartamento=" + apartamento + ", bloco="
-				+ bloco + "]";
+				+ bloco + ", vaga=" + vaga + ", veiculos=" + veiculos + "]";
 	}
 }

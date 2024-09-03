@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.teste.cond_vagas_garagem.dtos.MoradorDto;
+import com.example.teste.cond_vagas_garagem.exceptions.ConstraintViolationException;
 import com.example.teste.cond_vagas_garagem.exceptions.NotFoundObjectException;
 import com.example.teste.cond_vagas_garagem.exceptions.NotNullableFieldsException;
 import com.example.teste.cond_vagas_garagem.models.Morador;
@@ -70,6 +71,10 @@ public class MoradorService {
 	public void deleteMoradorById(Long id) {
 		
 		Morador deleteMorador = this.getMoradorById(id);
+		
+		if(!deleteMorador.getVeiculos().isEmpty() || deleteMorador.getVaga() != null) {
+			throw new ConstraintViolationException("Não é possível deletar o morador pois existem associações com veículos ou vagas.");
+		}
 		moradorRepository.deleteById(deleteMorador.getId());
 	}
 	
