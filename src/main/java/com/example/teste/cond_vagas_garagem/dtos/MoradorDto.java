@@ -1,5 +1,6 @@
 package com.example.teste.cond_vagas_garagem.dtos;
 
+import java.util.Objects;
 
 public class MoradorDto {
 	
@@ -41,6 +42,26 @@ public class MoradorDto {
 
 	public void setBloco(String bloco) {
 		this.bloco = bloco;
+	}
+
+	
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(apartamento, bloco, nomeDoMorador);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MoradorDto other = (MoradorDto) obj;
+		return Objects.equals(apartamento, other.apartamento) && Objects.equals(bloco, other.bloco)
+				&& Objects.equals(nomeDoMorador, other.nomeDoMorador);
 	}
 
 	@Override

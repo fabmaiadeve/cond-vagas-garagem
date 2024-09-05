@@ -2,6 +2,7 @@ package com.example.teste.cond_vagas_garagem.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
