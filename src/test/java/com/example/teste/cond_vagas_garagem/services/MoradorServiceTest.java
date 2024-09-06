@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.teste.cond_vagas_garagem.dtos.MoradorDto;
+import com.example.teste.cond_vagas_garagem.exceptions.NotFoundObjectException;
 import com.example.teste.cond_vagas_garagem.exceptions.NotNullableFieldsException;
 import com.example.teste.cond_vagas_garagem.models.Morador;
 import com.example.teste.cond_vagas_garagem.repositories.MoradorRepository;
@@ -24,10 +27,12 @@ class MoradorServiceTest {
 	@InjectMocks private MoradorService service;
 	
 	private MoradorDto validMoradorDto;
+	private Morador validMorador;
 
 	@BeforeEach
 	void setUp() {
 		validMoradorDto = new MoradorDto("MoradorSuccess", "apSuccess", "blocoSucess");
+		validMorador = new Morador("MoradorSuccess", "apSuccess", "blocoSucess");
 	}
 	
 	@Test
@@ -78,6 +83,30 @@ class MoradorServiceTest {
 		assertEquals("O campo de bloco não pode ser nulo ou vazio!", exception.getMessage());
 	}
 	
+	@Test
+	void testDeveRetornarMoradorPorIdComSucesso() {
+		
+		validMorador.setId(1L);
+		Optional<Morador> expectedMoradorOpt = Optional.of(validMorador);
+		
+		when(rep.findById(validMorador.getId())).thenReturn(expectedMoradorOpt);
+		
+		Morador savedMorador = service.getMoradorById(validMorador.getId());
+		
+		assertEquals(expectedMoradorOpt.get(), savedMorador);
+	}
+	
+	@Test
+	void testDeveRetornarExceptionQuandoMoradorNaoEncontrado() {
+		
+		Long invalidId = 99L;
+		
+		when(rep.findById(invalidId)).thenReturn(Optional.empty());
+		
+		NotFoundObjectException exception = assertThrows(NotFoundObjectException.class, () -> service.getMoradorById(invalidId));
+		
+		assertEquals("O id: 99 não se encontra na base de dados!", exception.getMessage());
+	}
 	
 
 }
