@@ -2,8 +2,14 @@ package com.example.teste.cond_vagas_garagem.services;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
@@ -15,9 +21,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.teste.cond_vagas_garagem.dtos.MoradorDto;
+import com.example.teste.cond_vagas_garagem.exceptions.ConstraintViolationException;
 import com.example.teste.cond_vagas_garagem.exceptions.NotFoundObjectException;
 import com.example.teste.cond_vagas_garagem.exceptions.NotNullableFieldsException;
 import com.example.teste.cond_vagas_garagem.models.Morador;
+import com.example.teste.cond_vagas_garagem.models.Veiculo;
 import com.example.teste.cond_vagas_garagem.repositories.MoradorRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -28,15 +36,19 @@ class MoradorServiceTest {
 	
 	private MoradorDto validMoradorDto;
 	private Morador validMorador;
+	private MoradorDto uptMoradorDto;
+	private Morador existingMorador;
 
 	@BeforeEach
 	void setUp() {
 		validMoradorDto = new MoradorDto("MoradorSuccess", "apSuccess", "blocoSucess");
 		validMorador = new Morador("MoradorSuccess", "apSuccess", "blocoSucess");
+		uptMoradorDto = new MoradorDto("UpdateMoradorSuccess", "UpdateApSuccess", "UpdateBlocoSucess");
+		existingMorador = new Morador("ExistingMoradorSuccess", "ExistingApSuccess", "ExistingBlocoSucess");
 	}
 	
 	@Test
-	public void deveSalvarMoradorComSucesso() {
+	public void testDeveSalvarMoradorComSucesso() {
 		
 		Morador expectedMorador = new Morador(
 				validMoradorDto.getNomeDoMorador(),
@@ -57,7 +69,7 @@ class MoradorServiceTest {
 	}
 	
 	@Test 
-	void testDeveLancarExceptionQuandoNomeDoMoradorEstaNulo() { 
+	public void testDeveLancarExceptionQuandoNomeDoMoradorEstaNulo() { 
 		 
 		validMoradorDto.setNomeDoMorador(null);
 		
@@ -66,7 +78,7 @@ class MoradorServiceTest {
 	}
 	
 	@Test 
-	void testDeveLancarExceptionQuandoApartamentoEstaNulo() { 
+	public void testDeveLancarExceptionQuandoApartamentoEstaNulo() { 
 		
 		validMoradorDto.setApartamento(null);
 		
@@ -75,7 +87,7 @@ class MoradorServiceTest {
 	}
 	
 	@Test 
-	void testDeveLancarExceptionQuandoBlocoEstaNulo() { 
+	public void testDeveLancarExceptionQuandoBlocoEstaNulo() { 
 		
 		validMoradorDto.setBloco(null);
 		
@@ -84,7 +96,7 @@ class MoradorServiceTest {
 	}
 	
 	@Test
-	void testDeveRetornarMoradorPorIdComSucesso() {
+	public void testDeveRetornarMoradorPorIdComSucesso() {
 		
 		validMorador.setId(1L);
 		Optional<Morador> expectedMoradorOpt = Optional.of(validMorador);
@@ -97,7 +109,7 @@ class MoradorServiceTest {
 	}
 	
 	@Test
-	void testDeveRetornarExceptionQuandoMoradorNaoEncontrado() {
+	public void testDeveRetornarExceptionQuandoMoradorNaoEncontrado() {
 		
 		Long invalidId = 99L;
 		
@@ -108,5 +120,84 @@ class MoradorServiceTest {
 		assertEquals("O id: 99 não se encontra na base de dados!", exception.getMessage());
 	}
 	
+	@Test
+	public void testDeveAlterarMoradorComSucesso() {
+		
+		Long validId = 1L;
+		
+		when(rep.findById(validId)).thenReturn(Optional.of(existingMorador));
+		
+		when(rep.save(any(Morador.class))).thenReturn(existingMorador);
+		
+		Morador updatedMorador = service.updateMoradorById(validId, uptMoradorDto);
+		
+		assertNotNull(updatedMorador);
+		assertEquals(uptMoradorDto.getNomeDoMorador(), updatedMorador.getNomeDoMorador());	
+	}
+	
+	@Test
+	public void testNaoDeveAlterarMoradorPorId() {
+        
+		Long invalidId = 99L;
+        
+		MoradorDto moradorDto = new MoradorDto("Nome Atualizado", "Apto 101", "Bloco B");
+
+        when(rep.findById(invalidId)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundObjectException.class, () -> service.updateMoradorById(invalidId, moradorDto));
+
+        verify(rep).findById(invalidId);
+        verify(rep, never()).save(any(Morador.class));
+    }
+	
+	@Test
+	public void testDeveDeletarMoradorComSucesso() {
+		
+		Long validId = 1L;
+        
+		Morador morador = new Morador("Nome Morador", "Apto 101", "Bloco A");
+		
+		morador.setId(validId);
+		morador.setVeiculos(Collections.emptyList());
+		morador.setVaga(null);
+		
+		when(rep.findById(validId)).thenReturn(Optional.of(morador));
+		
+		service.deleteMoradorById(validId);
+		
+		verify(rep).findById(validId);
+		verify(rep).deleteById(validId);
+	} 
+	
+	@Test
+	public void testNaoDeveDeletarMoradorQuandoIdNaoEncontrado() {
+		
+		Long invalidId = 99L;
+		
+		when(rep.findById(invalidId)).thenReturn(Optional.empty());
+		
+		assertThrows(NotFoundObjectException.class, () -> service.deleteMoradorById(invalidId));
+		
+		verify(rep).findById(invalidId);
+		verify(rep, never()).deleteById(anyLong());
+	}
+	
+	@Test
+	public void testNaoDeveDeletarMoradorPorquePossuiRegistroDeOutrasEntidades() {
+		
+		Long validId = 1L;
+        
+		Morador morador = new Morador("Nome Morador", "Apto 101", "Bloco A");
+
+		morador.setId(validId);
+		morador.setVeiculos(Collections.singletonList(new Veiculo()));
+		
+		when(rep.findById(validId)).thenReturn(Optional.of(morador));
+		
+		assertThrows(ConstraintViolationException.class, () -> service.deleteMoradorById(validId));
+		
+		verify(rep).findById(validId);
+		verify(rep, never()).deleteById(anyLong());		
+	}
 
 }
