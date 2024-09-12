@@ -1,18 +1,17 @@
 package com.example.teste.cond_vagas_garagem.services;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +39,7 @@ class MoradorServiceTest {
 	private Morador existingMorador;
 
 	@BeforeEach
-	void setUp() {
+	public void setUp() {
 		validMoradorDto = new MoradorDto("MoradorSuccess", "apSuccess", "blocoSucess");
 		validMorador = new Morador("MoradorSuccess", "apSuccess", "blocoSucess");
 		uptMoradorDto = new MoradorDto("UpdateMoradorSuccess", "UpdateApSuccess", "UpdateBlocoSucess");
