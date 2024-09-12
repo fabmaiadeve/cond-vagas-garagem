@@ -59,7 +59,7 @@ public class VagaService {
 		Optional<Vaga> vagaOpt = vagaRepository.findById(id);
 		
 		if(vagaOpt.isEmpty()) {
-			throw new NotFoundObjectException("O id: "+ id.toString() +" não se encontra na base de Dados.");
+			throw new NotFoundObjectException("O id: "+ id.toString() +" não se encontra na base de dados!");
 		}
 		return vagaOpt.get();
 	}
@@ -71,6 +71,11 @@ public class VagaService {
 		uptVaga.setNumeroDaVaga(vagaDto.getNumeroDaVaga());
 		uptVaga.setEhAlugada(vagaDto.getEhAlugada());
 		uptVaga.setMoradorQueAlugou(vagaDto.getMoradorQueAlugou());
+		
+		if(vagaDto.getMoradorId() != null) {
+			Morador morador = moradorService.getMoradorById(vagaDto.getMoradorId());
+			uptVaga.setMorador(morador);
+		}
 		
 		validateFields(uptVaga);
 		
@@ -106,7 +111,7 @@ public class VagaService {
 			throw new NotNullableFieldsException("O campo eh alugada não pode ser nulo!");
 		} else if(vaga.getEhAlugada() == true && vaga.getMoradorQueAlugou() == null) {
 			throw new NotNullableFieldsException("O campo morador que alugou não pode ser nulo!");
-		} else if(vaga.getMorador().getId() == null) {
+		} else if(vaga.getMorador() == null) {
 			throw new NotNullableFieldsException("O campo morador não pode ser nulo!");
 		}		
 	}
