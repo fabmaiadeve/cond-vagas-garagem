@@ -64,7 +64,7 @@ public class VeiculoService {
 		Optional<Veiculo> optVeiculo = veiculoRepository.findById(id);
 		
 		if(optVeiculo.isEmpty()) {
-			throw new NotFoundObjectException("O id: "+ id.toString() +" não se encontra na base de Dados.");
+			throw new NotFoundObjectException("O id: "+ id.toString() +" não se encontra na base de dados!");
 		}
 		return optVeiculo.get();
 	}
@@ -98,9 +98,9 @@ public class VeiculoService {
 			throw new NotNullableFieldsException("O campo modelo do veículo não pode ser nulo ou vazio!");
 		} else if(veiculo.getCorDoVeiculo() == null || veiculo.getCorDoVeiculo().isBlank()) {
 			throw new NotNullableFieldsException("O campo cor do veículo não pode ser nulo ou vazio!");
-		} else if(veiculo.getMorador().getId() == null) {
+		} else if(veiculo.getMorador() == null) {
 			throw new NotNullableFieldsException("O campo morador não pode ser nulo!");
-		} else if(veiculo.getVaga().getId() == null) {
+		} else if(veiculo.getVaga() == null) {
 			throw new NotNullableFieldsException("O campo vaga não pode ser nulo!");
 		}		
 	}

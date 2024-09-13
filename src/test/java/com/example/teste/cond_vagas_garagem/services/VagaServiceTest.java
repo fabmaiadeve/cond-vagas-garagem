@@ -211,5 +211,4 @@ class VagaServiceTest {
 
 	    verify(rep, never()).deleteById(validId);
 	}
-
 }

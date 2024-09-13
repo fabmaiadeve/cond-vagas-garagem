@@ -1,5 +1,7 @@
 package com.example.teste.cond_vagas_garagem.dtos;
 
+import java.util.Objects;
+
 public class VeiculoDto {
 	
 	private String placaDoVeiculo;
@@ -62,6 +64,25 @@ public class VeiculoDto {
 
 	public void setVagaId(Long vagaId) {
 		this.vagaId = vagaId;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(corDoVeiculo, modeloDoVeiculo, moradorId, placaDoVeiculo, vagaId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		VeiculoDto other = (VeiculoDto) obj;
+		return Objects.equals(corDoVeiculo, other.corDoVeiculo)
+				&& Objects.equals(modeloDoVeiculo, other.modeloDoVeiculo) && Objects.equals(moradorId, other.moradorId)
+				&& Objects.equals(placaDoVeiculo, other.placaDoVeiculo) && Objects.equals(vagaId, other.vagaId);
 	}
 
 	@Override
