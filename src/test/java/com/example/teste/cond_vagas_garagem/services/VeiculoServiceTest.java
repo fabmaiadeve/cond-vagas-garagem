@@ -53,7 +53,7 @@ class VeiculoServiceTest {
     }
 
     @Test
-    void testDeveSalvarVeiculoComSucesso() {
+    public void testDeveSalvarVeiculoComSucesso() {
         
     	validMorador.setId(1L);
     	validVaga.setId(1L);
@@ -73,7 +73,7 @@ class VeiculoServiceTest {
     }
 
     @Test
-    void testDeveLancarNotFoundObjectExceptionSeMoradorNaoForEncontrado() {
+    public void testDeveLancarNotFoundObjectExceptionSeMoradorNaoForEncontrado() {
         // Simula que o morador não foi encontrado
         when(moradorService.getMoradorById(1L)).thenThrow(new NotFoundObjectException("Morador não encontrado"));
 
@@ -85,7 +85,7 @@ class VeiculoServiceTest {
     }
 
     @Test
-    void testDeveLancarNotFoundObjectExceptionSeVagaNaoForEncontrada() {
+    public void testDeveLancarNotFoundObjectExceptionSeVagaNaoForEncontrada() {
         // Simula que a vaga não foi encontrada
         when(moradorService.getMoradorById(1L)).thenReturn(validMorador);
         when(vagaService.getVagaById(1L)).thenThrow(new NotFoundObjectException("Vaga não encontrada"));
@@ -98,7 +98,7 @@ class VeiculoServiceTest {
     }
 
     @Test
-    void testDeveLancarNotNullableFieldsExceptionQuandoPlacaDoVeiculoForNuloOuVazio() {
+    public void testDeveLancarNotNullableFieldsExceptionQuandoPlacaDoVeiculoForNuloOuVazio() {
         // Simula um DTO inválido (placa vazia)
         VeiculoDto invalidDto = new VeiculoDto("", "ModeloX", "Azul", 1L, 1L);
 
@@ -114,7 +114,7 @@ class VeiculoServiceTest {
     }
 
     @Test
-    void testDeveLancarNotNullableFieldsExceptionQuandoModeloDoVeiculoForNuloOuVazio() {
+    public void testDeveLancarNotNullableFieldsExceptionQuandoModeloDoVeiculoForNuloOuVazio() {
         // Simula um DTO inválido (modelo vazio)
         VeiculoDto invalidDto = new VeiculoDto("ABC-1234", "", "Azul", 1L, 1L);
 
@@ -130,7 +130,7 @@ class VeiculoServiceTest {
     }
     
     @Test
-    void testDeveLancarNotNullableFieldsExceptionQuandoCorDoVeiculoForNuloOuVazio() {
+    public void testDeveLancarNotNullableFieldsExceptionQuandoCorDoVeiculoForNuloOuVazio() {
         // Simula um DTO inválido (cor vazia)
         VeiculoDto invalidDto = new VeiculoDto("ABC-1234", "ModeloX", "", 1L, 1L);
 
