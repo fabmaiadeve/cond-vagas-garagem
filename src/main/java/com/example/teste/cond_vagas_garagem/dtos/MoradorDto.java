@@ -42,9 +42,7 @@ public class MoradorDto {
 
 	public void setBloco(String bloco) {
 		this.bloco = bloco;
-	}
-
-	
+	}	
 	
 	@Override
 	public int hashCode() {
