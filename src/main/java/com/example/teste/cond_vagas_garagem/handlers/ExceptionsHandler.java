@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.example.teste.cond_vagas_garagem.dtos.ErrorDto;
 import com.example.teste.cond_vagas_garagem.exceptions.ConstraintViolationException;
+import com.example.teste.cond_vagas_garagem.exceptions.ExistentUserLoginException;
 import com.example.teste.cond_vagas_garagem.exceptions.NotFoundObjectException;
 import com.example.teste.cond_vagas_garagem.exceptions.NotNullableFieldsException;
 
@@ -33,5 +34,12 @@ public class ExceptionsHandler {
 	@ExceptionHandler(ConstraintViolationException.class)
 	public ErrorDto handler(ConstraintViolationException ex) {
 		return new ErrorDto(ex.getMessage(), HttpStatus.CONFLICT.value());
+	}
+	
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	@ExceptionHandler(ExistentUserLoginException.class)
+	public ErrorDto handler(ExistentUserLoginException ex) {
+		return new ErrorDto(ex.getMessage(), HttpStatus.BAD_REQUEST.value());
 	}
 }
